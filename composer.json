@@ -1,0 +1,17 @@
+{
+    "name": "paulorlima9/bitgo",
+    "description": "PHP Client for BitGo Express",
+    "keywords": [
+        "bitgo-express",
+        "bitgo-sdk"
+    ],
+    "license": "MIT",
+    "require": {
+        "php": "^8.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\BitGo\\": "src"
+        }
+    }
+}
