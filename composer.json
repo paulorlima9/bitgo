@@ -1,10 +1,7 @@
 {
     "name": "paulorlima9/bitgo",
     "description": "PHP Client for BitGo Express",
-    "keywords": [
-        "bitgo-express",
-        "bitgo-sdk"
-    ],
+    "keywords": ["bitgo-express", "bitgo-sdk"],
     "license": "MIT",
     "require": {
         "php": "^8.0"
