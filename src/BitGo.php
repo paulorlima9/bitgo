@@ -59,9 +59,10 @@ class BitGo
         $this->hostname = $hostname;
         $this->port = $port;
         $this->accessToken = $accessToken;
+        $this->uri = $this->hostname . ':' . $this->port;
 
         $this->client = new Client([
-            'base_uri' => $this->hostname . ':' . $this->port . '/api/v2/'
+            'base_uri' => $this->uri . '/api/v2/'
         ]);
     }
 
@@ -934,7 +935,7 @@ class BitGo
      */
     private function execute($method = 'POST', $body = null, array $options = [])
     {
-        $uri =  $this->client;
+        $uri =  $this->uri;
         $response = $this->__execute($uri, $method, $body, $options);
 
         return json_decode($response->getBody(), true);
