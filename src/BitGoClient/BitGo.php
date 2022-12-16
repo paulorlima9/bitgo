@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\BitGo;
+namespace Modules\BitGoClient;
 
 use Carbon\Carbon;
 use Exception;
