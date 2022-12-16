@@ -1,6 +1,25 @@
 <?php
+/**
+ * ======================================================================================================
+ * File Name: Currency.php
+ * ======================================================================================================
+ * Author: NeoScrypts
+ * ------------------------------------------------------------------------------------------------------
+ * Portfolio: http://codecanyon.net/user/holluwatosin360
+ * ------------------------------------------------------------------------------------------------------
+ * Date & Time: 7/11/2019 (5:02 PM)
+ * ------------------------------------------------------------------------------------------------------
+ *
+ * Copyright (c) 2019. This project is released under the standard of CodeCanyon License.
+ * You may NOT modify/redistribute this copy of the project. We reserve the right to take legal actions
+ * if any part of the license is violated. Learn more: https://codecanyon.net/licenses/standard.
+ *
+ * ------------------------------------------------------------------------------------------------------
+ */
 
-namespace Modules\BitGoClient;
+namespace Modules\BitGo;
+
+use ReflectionClass;
 
 class Coin
 {

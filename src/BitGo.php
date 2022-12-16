@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\BitGoClient;
+namespace Modules\BitGo;
 
 use Carbon\Carbon;
 use Exception;
@@ -9,6 +9,7 @@ use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\GuzzleException;
 use Psr\Http\Message\ResponseInterface;
+
 
 class BitGo
 {
