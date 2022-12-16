@@ -821,7 +821,7 @@ class BitGo
      */
     public function getPendingApproval(string $pendingApprovalId)
     {
-        return $this->execute('pendingApprovals/' . $pendingApprovalId, 'GET');
+        return $this->execute($this->getCoin() . 'pendingApprovals/' . $pendingApprovalId, 'GET');
     }
 
     /**
@@ -840,7 +840,7 @@ class BitGo
         string $otp
     )
     {
-        return $this->execute('pendingApprovals/' . $pendingApprovalId, 'PUT', [
+        return $this->execute($this->getCoin() . 'pendingApprovals/' . $pendingApprovalId, 'PUT', [
             'state' => $state,
             'otp'   => $otp
         ]);
