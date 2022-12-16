@@ -10,6 +10,7 @@ use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\GuzzleException;
 use Psr\Http\Message\ResponseInterface;
 
+
 class BitGo
 {
     /**
@@ -59,9 +60,9 @@ class BitGo
         $this->hostname = $hostname;
         $this->port = $port;
         $this->accessToken = $accessToken;
-        $this->uri = 'http://' . $this->hostname . ':' . $this->port . '/';
+
         $this->client = new Client([
-            'base_uri' => $this->hostname . ':' . $this->port . '/api/v2/',
+            'base_uri' => $this->hostname . ':' . $this->port . '/api/v2/'
         ]);
     }
 
@@ -135,13 +136,18 @@ class BitGo
      * @throws GuzzleException
      * @throws Exception
      */
-    public function login(string $email, string $password, string $otp, bool $extensible = null)
+    public function login(
+        string $email,
+        string $password,
+        string $otp,
+        bool $extensible = null
+    )
     {
         $response = $this->__execute('user/login', 'POST', [
-            'email' => $email,
-            'password' => $password,
-            'otp' => $otp,
-            'extensible' => $extensible,
+            'email'      => $email,
+            'password'   => $password,
+            'otp'        => $otp,
+            'extensible' => $extensible
         ]);
 
         $body = json_decode($response->getBody(), true);
@@ -190,17 +196,18 @@ class BitGo
         bool $disableTransactionNotifications = null,
         int $gasPrice = null,
         string $passcodeEncryptionCode = null
-    ) {
+    )
+    {
         return $this->execute($this->getCoin() . '/wallet/generate', 'POST', [
-            'label' => $label,
-            'passphrase' => $passphrase,
-            'userKey' => $userKey,
-            'backupXpub' => $backupXpub,
-            'backupXpubProvider' => $backupXpubProvider,
-            'enterprise' => $enterprise,
+            'label'                           => $label,
+            'passphrase'                      => $passphrase,
+            'userKey'                         => $userKey,
+            'backupXpub'                      => $backupXpub,
+            'backupXpubProvider'              => $backupXpubProvider,
+            'enterprise'                      => $enterprise,
             'disableTransactionNotifications' => $disableTransactionNotifications,
-            'gasPrice' => $this->getCoin() === Coin::ETHEREUM ? $gasPrice : 0,
-            'passcodeEncryptionCode' => $passcodeEncryptionCode,
+            'gasPrice'                        => $this->getCoin() === Coin::ETHEREUM ? $gasPrice : 0,
+            'passcodeEncryptionCode'          => $passcodeEncryptionCode
         ]);
     }
 
@@ -215,14 +222,19 @@ class BitGo
      * @throws GuzzleException
      * @throws BitGoException
      */
-    public function createAddress(bool $allowMigrated = false, int $chain = 0, int $gasPrice = null, string $label = null)
+    public function createAddress(
+        bool $allowMigrated = false,
+        int $chain = 0,
+        int $gasPrice = null,
+        string $label = null
+    )
     {
         return $this->execute($this->getCoin() . '/wallet/' . $this->walletId . '/address', 'POST', [
-            'id' => $this->walletId,
+            'id'            => $this->walletId,
             'allowMigrated' => $allowMigrated,
-            'chain' => $this->coin === Coin::BITCOIN || $this->coin === Coin::BITCOIN_GOLD ? $chain : 0,
-            'gasPrice' => $this->coin === Coin::ETHEREUM ? $gasPrice : null,
-            'label' => $label,
+            'chain'         => $this->coin === Coin::BITCOIN || $this->coin === Coin::BITCOIN_GOLD ? $chain : 0,
+            'gasPrice'      => $this->coin === Coin::ETHEREUM ? $gasPrice : null,
+            'label'         => $label
         ]);
     }
 
@@ -241,16 +253,24 @@ class BitGo
      * @throws GuzzleException
      * @throws BitGoException
      */
-    public function addWallet(string $label, int $m, int $n, array $keys, string $enterprise = null, bool $isCold = null, bool $disableTransactionNotifications = null)
+    public function addWallet(
+        string $label,
+        int $m,
+        int $n,
+        array $keys,
+        string $enterprise = null,
+        bool $isCold = null,
+        bool $disableTransactionNotifications = null
+    )
     {
         return $this->execute($this->getCoin() . '/wallet', 'POST', [
-            'label' => $label,
-            'm' => $m,
-            'n' => $n,
-            'keys' => $keys,
-            'enterprise' => $enterprise,
-            'isCold' => $isCold,
-            'disableTransactionNotifications' => $disableTransactionNotifications,
+            'label'                           => $label,
+            'm'                               => $m,
+            'n'                               => $n,
+            'keys'                            => $keys,
+            'enterprise'                      => $enterprise,
+            'isCold'                          => $isCold,
+            'disableTransactionNotifications' => $disableTransactionNotifications
         ]);
     }
 
@@ -264,12 +284,16 @@ class BitGo
      * @throws GuzzleException
      * @throws BitGoException
      */
-    public function addWalletWebhook(string $url, string $type, int $numConfirmations = null)
+    public function addWalletWebhook(
+        string $url,
+        string $type,
+        int $numConfirmations = null
+    )
     {
         return $this->execute($this->getCoin() . '/wallet/' . $this->walletId . '/webhooks', 'POST', [
-            'url' => $url,
-            'type' => $type,
-            'numConfirmations' => $numConfirmations,
+            'url'              => $url,
+            'type'             => $type,
+            'numConfirmations' => $numConfirmations
         ]);
     }
 
@@ -282,11 +306,14 @@ class BitGo
      * @throws GuzzleException
      * @throws BitGoException
      */
-    public function removeWalletWebhook(string $url, string $type)
+    public function removeWalletWebhook(
+        string $url,
+        string $type
+    )
     {
         return $this->execute($this->getCoin() . '/wallet/' . $this->walletId . '/webhooks', 'DELETE', [
-            'url' => $url,
-            'type' => $type,
+            'url'  => $url,
+            'type' => $type
         ]);
     }
 
@@ -338,28 +365,31 @@ class BitGo
         bool $segwit = null,
         int $lastLedgerSequence = null,
         string $ledgerSequenceDelta = null
-    ) {
+    )
+    {
         return $this->execute($this->getCoin() . '/wallet/' . $this->walletId . '/sendcoins', 'POST', [
-            'address' => $address,
-            'amount' => $amount,
-            'walletPassphrase' => $walletPassphrase,
-            'prv' => $prv,
-            'numBlocks' => $this->isCoinUTXOBased() ? $numBlocks : null,
-            'feeRate' => $this->isCoinUTXOBased() ? $feeRate : null,
-            'comment' => $comment,
-            'unspents' => $this->isCoinUTXOBased() ? $unspents : null,
-            'minConfirms' => $this->isCoinUTXOBased() ? $minConfirms : null,
+            'address'                     => $address,
+            'amount'                      => $amount,
+            'walletPassphrase'            => $walletPassphrase,
+            'prv'                         => $prv,
+            'numBlocks'                   => $this->isCoinUTXOBased() ? $numBlocks : null,
+            'feeRate'                     => $this->isCoinUTXOBased() ? $feeRate : null,
+            'comment'                     => $comment,
+            'unspents'                    => $this->isCoinUTXOBased() ? $unspents : null,
+            'minConfirms'                 => $this->isCoinUTXOBased() ? $minConfirms : null,
             'enforceMinConfirmsForChange' => $this->isCoinUTXOBased() ? $enforceMinConfirmsForChange : null,
-            'targetWalletUnspents' => $this->isCoinUTXOBased() ? $targetWalletUnspents : null,
-            'noSplitChange' => $this->isCoinUTXOBased() ? $noSplitChange : null,
-            'minValue' => $this->isCoinUTXOBased() ? $minValue : null,
-            'maxValue' => $this->isCoinUTXOBased() ? $maxValue : null,
-            'gasPrice' => $this->getCoin() === Coin::ETHEREUM ? $gasPrice : null,
-            'gasLimit' => $this->getCoin() === Coin::ETHEREUM ? $gasLimit : null,
-            'sequenceId' => $this->getCoin() === Coin::ETHEREUM ? $sequenceId : null,
-            'segwit' => in_array($this->getCoin(), [Coin::BITCOIN, Coin::LITECOIN, Coin::BITCOIN_GOLD]) ? $segwit : null,
-            'lastLedgerSequence' => $this->getCoin() === Coin::RIPPLE ? $lastLedgerSequence : null,
-            'ledgerSequenceDelta' => $this->getCoin() === Coin::RIPPLE ? $ledgerSequenceDelta : null,
+            'targetWalletUnspents'        => $this->isCoinUTXOBased() ? $targetWalletUnspents : null,
+            'noSplitChange'               => $this->isCoinUTXOBased() ? $noSplitChange : null,
+            'minValue'                    => $this->isCoinUTXOBased() ? $minValue : null,
+            'maxValue'                    => $this->isCoinUTXOBased() ? $maxValue : null,
+            'gasPrice'                    => $this->getCoin() === Coin::ETHEREUM ? $gasPrice : null,
+            'gasLimit'                    => $this->getCoin() === Coin::ETHEREUM ? $gasLimit : null,
+            'sequenceId'                  => $this->getCoin() === Coin::ETHEREUM ? $sequenceId : null,
+            'segwit'                      => in_array($this->getCoin(), [
+                Coin::BITCOIN, Coin::LITECOIN, Coin::BITCOIN_GOLD
+            ]) ? $segwit : null,
+            'lastLedgerSequence'          => $this->getCoin() === Coin::RIPPLE ? $lastLedgerSequence : null,
+            'ledgerSequenceDelta'         => $this->getCoin() === Coin::RIPPLE ? $ledgerSequenceDelta : null
         ]);
     }
 
@@ -374,7 +404,7 @@ class BitGo
     public function feeEstimate(int $numBlocks = null)
     {
         return $this->execute($this->getCoin() . '/tx/fee', 'GET', [
-            'numBlocks' => $numBlocks,
+            'numBlocks' => $numBlocks
         ]);
     }
 
@@ -438,27 +468,30 @@ class BitGo
         bool $segwit = null,
         int $lastLedgerSequence = null,
         string $ledgerSequenceDelta = null
-    ) {
+    )
+    {
         return $this->execute($this->getCoin() . '/wallet/' . $this->walletId . '/sendmany', 'POST', [
-            'recipients' => $recipients,
-            'walletPassphrase' => $walletPassphrase,
-            'prv' => $prv,
-            'numBlocks' => $this->isCoinUTXOBased() ? $numBlocks : null,
-            'feeRate' => $this->isCoinUTXOBased() ? $feeRate : null,
-            'comment' => $comment,
-            'unspents' => $this->isCoinUTXOBased() ? $unspents : null,
-            'minConfirms' => $this->isCoinUTXOBased() ? $minConfirms : null,
+            'recipients'                  => $recipients,
+            'walletPassphrase'            => $walletPassphrase,
+            'prv'                         => $prv,
+            'numBlocks'                   => $this->isCoinUTXOBased() ? $numBlocks : null,
+            'feeRate'                     => $this->isCoinUTXOBased() ? $feeRate : null,
+            'comment'                     => $comment,
+            'unspents'                    => $this->isCoinUTXOBased() ? $unspents : null,
+            'minConfirms'                 => $this->isCoinUTXOBased() ? $minConfirms : null,
             'enforceMinConfirmsForChange' => $this->isCoinUTXOBased() ? $enforceMinConfirmsForChange : null,
-            'targetWalletUnspents' => $this->isCoinUTXOBased() ? $targetWalletUnspents : null,
-            'noSplitChange' => $this->isCoinUTXOBased() ? $noSplitChange : null,
-            'minValue' => $this->isCoinUTXOBased() ? $minValue : null,
-            'maxValue' => $this->isCoinUTXOBased() ? $maxValue : null,
-            'gasPrice' => $this->getCoin() === Coin::ETHEREUM ? $gasPrice : null,
-            'gasLimit' => $this->getCoin() === Coin::ETHEREUM ? $gasLimit : null,
-            'sequenceId' => $this->getCoin() === Coin::ETHEREUM ? $sequenceId : null,
-            'segwit' => in_array($this->getCoin(), [Coin::BITCOIN, Coin::LITECOIN, Coin::BITCOIN_GOLD]) ? $segwit : null,
-            'lastLedgerSequence' => $this->getCoin() === Coin::RIPPLE ? $lastLedgerSequence : null,
-            'ledgerSequenceDelta' => $this->getCoin() === Coin::RIPPLE ? $ledgerSequenceDelta : null,
+            'targetWalletUnspents'        => $this->isCoinUTXOBased() ? $targetWalletUnspents : null,
+            'noSplitChange'               => $this->isCoinUTXOBased() ? $noSplitChange : null,
+            'minValue'                    => $this->isCoinUTXOBased() ? $minValue : null,
+            'maxValue'                    => $this->isCoinUTXOBased() ? $maxValue : null,
+            'gasPrice'                    => $this->getCoin() === Coin::ETHEREUM ? $gasPrice : null,
+            'gasLimit'                    => $this->getCoin() === Coin::ETHEREUM ? $gasLimit : null,
+            'sequenceId'                  => $this->getCoin() === Coin::ETHEREUM ? $sequenceId : null,
+            'segwit'                      => in_array($this->getCoin(), [
+                Coin::BITCOIN, Coin::LITECOIN, Coin::BITCOIN_GOLD
+            ]) ? $segwit : null,
+            'lastLedgerSequence'          => $this->getCoin() === Coin::RIPPLE ? $lastLedgerSequence : null,
+            'ledgerSequenceDelta'         => $this->getCoin() === Coin::RIPPLE ? $ledgerSequenceDelta : null
         ]);
     }
 
@@ -492,19 +525,20 @@ class BitGo
         int $maxFeePercentage = null,
         int $minConfirms = null,
         bool $enforceMinConfirmsForChange = null
-    ) {
+    )
+    {
         return $this->execute($this->getCoin() . '/wallet/' . $this->walletId . '/consolidateunspents', 'POST', [
-            'walletPassphrase' => $walletPassphrase,
-            'numUnspentsToMake' => $numUnspentsToMake,
-            'limit' => $limit,
-            'minValue' => $minValue,
-            'maxValue' => $maxValue,
-            'minHeight' => $minHeight,
-            'feeRate' => $feeRate,
-            'feeTxConfirmTarget' => $this->getCoin() === Coin::BITCOIN ? $feeTxConfirmTarget : null,
-            'maxFeePercentage' => !isset($minValue) ? $maxFeePercentage : null,
-            'minConfirms' => $minConfirms,
-            'enforceMinConfirmsForChange' => $enforceMinConfirmsForChange,
+            'walletPassphrase'            => $walletPassphrase,
+            'numUnspentsToMake'           => $numUnspentsToMake,
+            'limit'                       => $limit,
+            'minValue'                    => $minValue,
+            'maxValue'                    => $maxValue,
+            'minHeight'                   => $minHeight,
+            'feeRate'                     => $feeRate,
+            'feeTxConfirmTarget'          => $this->getCoin() === Coin::BITCOIN ? $feeTxConfirmTarget : null,
+            'maxFeePercentage'            => !isset($minValue) ? $maxFeePercentage : null,
+            'minConfirms'                 => $minConfirms,
+            'enforceMinConfirmsForChange' => $enforceMinConfirmsForChange
         ]);
     }
 
@@ -540,20 +574,21 @@ class BitGo
         bool $enforceMinConfirmsForChange = null,
         int $feeRate = null,
         int $feeTxConfirmTarget = null
-    ) {
+    )
+    {
         return $this->execute($this->getCoin() . '/wallet/' . $this->walletId . '/fanoutunspents', 'POST', [
-            'walletPassphrase' => $walletPassphrase,
-            'xprv' => $xprv,
-            'maxNumInputsToUse' => $maxNumInputsToUse,
-            'numUnspentsToMake' => $numUnspentsToMake,
-            'minValue' => $minValue,
-            'maxValue' => $maxValue,
-            'minHeight' => $minHeight,
-            'maxFeePercentage' => !isset($minValue) ? $maxFeePercentage : null,
-            'minConfirms' => $minConfirms,
+            'walletPassphrase'            => $walletPassphrase,
+            'xprv'                        => $xprv,
+            'maxNumInputsToUse'           => $maxNumInputsToUse,
+            'numUnspentsToMake'           => $numUnspentsToMake,
+            'minValue'                    => $minValue,
+            'maxValue'                    => $maxValue,
+            'minHeight'                   => $minHeight,
+            'maxFeePercentage'            => !isset($minValue) ? $maxFeePercentage : null,
+            'minConfirms'                 => $minConfirms,
             'enforceMinConfirmsForChange' => $enforceMinConfirmsForChange,
-            'feeRate' => $feeRate,
-            'feeTxConfirmTarget' => $this->getCoin() === Coin::BITCOIN ? $feeTxConfirmTarget : null,
+            'feeRate'                     => $feeRate,
+            'feeTxConfirmTarget'          => $this->getCoin() === Coin::BITCOIN ? $feeTxConfirmTarget : null
         ]);
     }
 
@@ -585,18 +620,19 @@ class BitGo
         int $sequenceId = null,
         int $lastLedgerSequence = null,
         string $ledgerSequenceDelta = null
-    ) {
+    )
+    {
         return $this->execute($this->getCoin() . '/wallet/' . $this->walletId . '/sweep', 'POST', [
-            'address' => $address,
-            'walletPassphrase' => $walletPassphrase,
-            'xprv' => $xprv,
-            'otp' => $otp,
-            'feeRate' => $this->isCoinUTXOBased() ? $feeRate : null,
-            'feeTxConfirmTarget' => $this->isCoinUTXOBased() ? $feeTxConfirmTarget : null,
-            'gasPrice' => $this->getCoin() === Coin::ETHEREUM ? $gasPrice : null,
-            'sequenceId' => $sequenceId,
-            'lastLedgerSequence' => $this->getCoin() === Coin::RIPPLE ? $lastLedgerSequence : null,
-            'ledgerSequenceDelta' => $this->getCoin() === Coin::RIPPLE ? $ledgerSequenceDelta : null,
+            'address'             => $address,
+            'walletPassphrase'    => $walletPassphrase,
+            'xprv'                => $xprv,
+            'otp'                 => $otp,
+            'feeRate'             => $this->isCoinUTXOBased() ? $feeRate : null,
+            'feeTxConfirmTarget'  => $this->isCoinUTXOBased() ? $feeTxConfirmTarget : null,
+            'gasPrice'            => $this->getCoin() === Coin::ETHEREUM ? $gasPrice : null,
+            'sequenceId'          => $sequenceId,
+            'lastLedgerSequence'  => $this->getCoin() === Coin::RIPPLE ? $lastLedgerSequence : null,
+            'ledgerSequenceDelta' => $this->getCoin() === Coin::RIPPLE ? $ledgerSequenceDelta : null
         ]);
     }
 
@@ -634,21 +670,22 @@ class BitGo
         int $gasPrice = null,
         int $lastLedgerSequence = null,
         string $ledgerSequenceDelta = null
-    ) {
+    )
+    {
         return $this->execute($this->getCoin() . '/wallet/' . $this->walletId . '/tx/build', 'POST', [
-            'recipients' => $recipients,
-            'numBlocks' => $this->isCoinUTXOBased() ? $numBlocks : null,
-            'feeRate' => $this->isCoinUTXOBased() ? $feeRate : null,
-            'minConfirms' => $this->isCoinUTXOBased() ? $minConfirms : null,
+            'recipients'                  => $recipients,
+            'numBlocks'                   => $this->isCoinUTXOBased() ? $numBlocks : null,
+            'feeRate'                     => $this->isCoinUTXOBased() ? $feeRate : null,
+            'minConfirms'                 => $this->isCoinUTXOBased() ? $minConfirms : null,
             'enforceMinConfirmsForChange' => $this->isCoinUTXOBased() ? $enforceMinConfirmsForChange : null,
-            'unspents' => $this->isCoinUTXOBased() ? $unspents : null,
-            'targetWalletUnspents' => $this->isCoinUTXOBased() ? $targetWalletUnspents : null,
-            'noSplitChange' => $this->isCoinUTXOBased() ? $noSplitChange : null,
-            'minValue' => $this->isCoinUTXOBased() ? $minValue : null,
-            'maxValue' => $this->isCoinUTXOBased() ? $maxValue : null,
-            'gasPrice' => $this->getCoin() === Coin::ETHEREUM ? $gasPrice : null,
-            'lastLedgerSequence' => $this->getCoin() === Coin::RIPPLE ? $lastLedgerSequence : null,
-            'ledgerSequenceDelta' => $this->getCoin() === Coin::RIPPLE ? $ledgerSequenceDelta : null,
+            'unspents'                    => $this->isCoinUTXOBased() ? $unspents : null,
+            'targetWalletUnspents'        => $this->isCoinUTXOBased() ? $targetWalletUnspents : null,
+            'noSplitChange'               => $this->isCoinUTXOBased() ? $noSplitChange : null,
+            'minValue'                    => $this->isCoinUTXOBased() ? $minValue : null,
+            'maxValue'                    => $this->isCoinUTXOBased() ? $maxValue : null,
+            'gasPrice'                    => $this->getCoin() === Coin::ETHEREUM ? $gasPrice : null,
+            'lastLedgerSequence'          => $this->getCoin() === Coin::RIPPLE ? $lastLedgerSequence : null,
+            'ledgerSequenceDelta'         => $this->getCoin() === Coin::RIPPLE ? $ledgerSequenceDelta : null
         ]);
     }
 
@@ -665,14 +702,20 @@ class BitGo
      * @throws GuzzleException
      * @throws BitGoException
      */
-    public function signBuildTransaction($txPrebuild, string $prv = null, string $coldDerivationSeed = null, $keychain = null, string $walletPassphrase = null)
+    public function signBuildTransaction(
+        $txPrebuild,
+        string $prv = null,
+        string $coldDerivationSeed = null,
+        $keychain = null,
+        string $walletPassphrase = null
+    )
     {
         return $this->execute($this->getCoin() . '/wallet/' . $this->walletId . '/signtx', 'POST', [
-            'txPrebuild' => $txPrebuild,
-            'prv' => $prv,
+            'txPrebuild'         => $txPrebuild,
+            'prv'                => $prv,
             'coldDerivationSeed' => $coldDerivationSeed,
-            'keychain' => $keychain,
-            'walletPassphrase' => $walletPassphrase,
+            'keychain'           => $keychain,
+            'walletPassphrase'   => $walletPassphrase
         ]);
     }
 
@@ -687,13 +730,18 @@ class BitGo
      * @throws GuzzleException
      * @throws BitGoException
      */
-    public function sendBuildTransaction($halfSigned, string $otp, string $txHex = null, string $comment = null)
+    public function sendBuildTransaction(
+        $halfSigned,
+        string $otp,
+        string $txHex = null,
+        string $comment = null
+    )
     {
         return $this->execute($this->getCoin() . '/wallet/' . $this->walletId . '/tx/send', 'POST', [
             'halfSigned' => $halfSigned,
-            'otp' => $otp,
-            'txHex' => $txHex,
-            'comment' => $comment,
+            'otp'        => $otp,
+            'txHex'      => $txHex,
+            'comment'    => $comment
         ]);
     }
 
@@ -721,14 +769,20 @@ class BitGo
      * @throws GuzzleException
      * @throws BitGoException
      */
-    public function shareWallet(string $email, string $permissions, string $walletPassphrase = null, bool $skipKeychain = null, bool $disableEmail = null)
+    public function shareWallet(
+        string $email,
+        string $permissions,
+        string $walletPassphrase = null,
+        bool $skipKeychain = null,
+        bool $disableEmail = null
+    )
     {
         return $this->execute($this->getCoin() . '/wallet/' . $this->walletId . '/share', 'POST', [
-            'email' => $email,
-            'permissions' => $permissions,
+            'email'            => $email,
+            'permissions'      => $permissions,
             'walletPassphrase' => $walletPassphrase,
-            'skipKeychain' => $skipKeychain,
-            'disableEmail' => $disableEmail,
+            'skipKeychain'     => $skipKeychain,
+            'disableEmail'     => $disableEmail
         ]);
     }
 
@@ -743,13 +797,18 @@ class BitGo
      * @throws BitGoException
      * @throws GuzzleException
      */
-    public function acceptWalletShare(string $walletShareId, string $newWalletPassphrase = null, string $userPassword = null, string $overrideEncryptedPrv = null)
+    public function acceptWalletShare(
+        string $walletShareId,
+        string $newWalletPassphrase = null,
+        string $userPassword = null,
+        string $overrideEncryptedPrv = null
+    )
     {
         return $this->execute($this->getCoin() . '/walletshare/' . $walletShareId . '/acceptshare', 'POST', [
-            'walletShareId' => $walletShareId,
-            'newWalletPassphrase' => $newWalletPassphrase,
-            'userPassword' => $userPassword,
-            'overrideEncryptedPrv' => $overrideEncryptedPrv,
+            'walletShareId'        => $walletShareId,
+            'newWalletPassphrase'  => $newWalletPassphrase,
+            'userPassword'         => $userPassword,
+            'overrideEncryptedPrv' => $overrideEncryptedPrv
         ]);
     }
 
@@ -776,11 +835,15 @@ class BitGo
      * @throws BitGoException
      * @throws GuzzleException
      */
-    public function updatePendingApproval(string $pendingApprovalId, string $state, string $otp)
+    public function updatePendingApproval(
+        string $pendingApprovalId,
+        string $state,
+        string $otp
+    )
     {
         return $this->execute('pendingApprovals/' . $pendingApprovalId, 'PUT', [
             'state' => $state,
-            'otp' => $otp,
+            'otp'   => $otp
         ]);
     }
 
@@ -793,11 +856,14 @@ class BitGo
      * @throws BitGoException
      * @throws GuzzleException
      */
-    public function encrypt(string $input, string $password)
+    public function encrypt(
+        string $input,
+        string $password
+    )
     {
         return $this->execute('encrypt', 'POST', [
-            'input' => $input,
-            'password' => $password,
+            'input'    => $input,
+            'password' => $password
         ]);
     }
 
@@ -810,11 +876,14 @@ class BitGo
      * @throws GuzzleException
      * @throws BitGoException
      */
-    public function decrypt(string $input, string $password)
+    public function decrypt(
+        string $input,
+        string $password
+    )
     {
         return $this->execute('decrypt', 'POST', [
-            'input' => $input,
-            'password' => $password,
+            'input'    => $input,
+            'password' => $password
         ]);
     }
 
@@ -829,7 +898,7 @@ class BitGo
     public function verifyAddress(string $address)
     {
         return $this->execute($this->getCoin() . '/verifyaddress', 'POST', [
-            'address' => $address,
+            'address' => $address
         ]);
     }
 
@@ -887,13 +956,13 @@ class BitGo
         try {
             if ($this->shouldAuthorize()) {
                 $headers = collect($options->get('headers'));
-                $headers->put('Authorization', "Bearer {$this->accessToken}");
+                $headers->put('Authorization',  "Bearer {$this->accessToken}");
                 $options->put('headers', $headers);
             }
 
             if (is_array($body)) {
                 $options->put('json', array_filter($body));
-            } elseif (is_string($body)) {
+            } else if (is_string($body)) {
                 $options->put('body', $body);
             }
 
