@@ -59,7 +59,7 @@ class BitGo
         $this->hostname = $hostname;
         $this->port = $port;
         $this->accessToken = $accessToken;
-        $this->uri = 'http://' . env('BITGO_HOST') . ':' . env('BITGO_PORT') . '/';
+        $this->uri = 'http://' . $this->hostname . ':' . $this->port . '/';
         $this->client = new Client([
             'base_uri' => $this->hostname . ':' . $this->port . '/api/v2/',
         ]);
