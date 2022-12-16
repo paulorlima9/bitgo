@@ -821,7 +821,7 @@ class BitGo
      */
     public function getPendingApproval(string $pendingApprovalId)
     {
-        return $this->execute($this->getCoin() . 'pendingApprovals/' . $pendingApprovalId, 'GET');
+        return $this->execute('pendingApprovals/' . $pendingApprovalId, 'GET');
     }
 
     /**
@@ -840,7 +840,7 @@ class BitGo
         string $otp
     )
     {
-        return $this->execute($this->getCoin() . 'pendingApprovals/' . $pendingApprovalId, 'PUT', [
+        return $this->execute('pendingApprovals/' . $pendingApprovalId, 'PUT', [
             'state' => $state,
             'otp'   => $otp
         ]);
@@ -932,8 +932,9 @@ class BitGo
      * @throws GuzzleException
      * @throws BitGoException
      */
-    private function execute($uri, $method = 'POST', $body = null, array $options = [])
+    private function execute($method = 'POST', $body = null, array $options = [])
     {
+        $uri =  $this->client;
         $response = $this->__execute($uri, $method, $body, $options);
 
         return json_decode($response->getBody(), true);
