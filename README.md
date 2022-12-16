@@ -1,1 +1,1 @@
-# bitgo
+# bitgo client
