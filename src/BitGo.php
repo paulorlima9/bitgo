@@ -935,7 +935,7 @@ class BitGo
      */
     private function execute($uri = null, $method = 'POST', $body = null, array $options = [])
     {
-        $uri = 'http://139.144.99.121:4000/';
+        $uri = $this->client;
         $response = $this->__execute($uri, $method, $body, $options);
         return json_decode($response->getBody(), true);
     }
