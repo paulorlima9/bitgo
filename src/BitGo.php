@@ -933,10 +933,9 @@ class BitGo
      * @throws GuzzleException
      * @throws BitGoException
      */
-    private function execute($uri, $method = 'POST', $body = null, array $options = [])
+    private function execute($uri = null, $method = 'POST', $body = null, array $options = [])
     {
         $response = $this->__execute($uri, $method, $body, $options);
-
         return json_decode($response->getBody(), true);
     }
 
@@ -949,7 +948,7 @@ class BitGo
      * @throws BitGoException
      * @throws GuzzleException
      */
-    private function __execute($uri, $method = 'POST', $body = null, array $options = [])
+    private function __execute($uri = null, $method = 'POST', $body = null, array $options = [])
     {
         $options = collect($options);
 
